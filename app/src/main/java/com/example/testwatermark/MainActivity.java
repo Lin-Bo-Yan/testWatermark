@@ -17,9 +17,13 @@ import com.tom_roush.pdfbox.pdmodel.PDPageTree;
 import com.tom_roush.pdfbox.pdmodel.common.PDRectangle;
 import com.tom_roush.pdfbox.pdmodel.font.PDFont;
 import com.tom_roush.pdfbox.pdmodel.font.PDType0Font;
+import com.tom_roush.pdfbox.pdmodel.graphics.image.JPEGFactory;
+import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import com.tom_roush.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
     File root;
@@ -49,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             PDDocument document = PDDocument.load(assetManager.open("example-pdf.pdf"));
             PDPageTree pages = document.getPages();
-            PDPageContentStream contentStream;
+            PDExtendedGraphicsState graphicsState = new PDExtendedGraphicsState();
 
             // 修改此處，加載自訂字體
             // 注意將 "path/to/NotoSansSC-Regular.otf" 換為你的字體文件路徑
@@ -60,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
                 PDPageContentStream cs = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true);
 
                 // 定義用於添加到 PDF 的內容流
-                contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
-
-                // 用藍色文本寫“AAA”
+                PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
                 contentStream.beginText();
+                graphicsState.setNonStrokingAlphaConstant(0.1f); // 透明度
+                contentStream.setGraphicsStateParameters(graphicsState);
                 contentStream.setNonStrokingColor(15, 38, 192);
                 contentStream.setFont(font, 12);
                 contentStream.newLineAtOffset(100, 700);
@@ -76,13 +80,18 @@ public class MainActivity extends AppCompatActivity {
                 float startX = (mediaBox.getWidth() - stringWidth) / 2;
                 float startY = (mediaBox.getHeight() - fontSize) / 2;
 
-                // 添加浮水印文字
-                cs.beginText();
-                cs.setFont(font, 12);
-                cs.setTextTranslation(startX, startY);
-                cs.showText("這是浮水印");
-                cs.endText();
+                // 計算圖像的位置
+                float imageWidth = 100.0f;
+                float imageHeight = 100.0f;
+                float imageX = (mediaBox.getWidth() - imageWidth) / 2; // 居中顯示
+                float imageY = mediaBox.getLowerLeftY() + 10; // 距離底部 10 個單位
+                InputStream in = assetManager.open("falcon.jpg");
+                PDImageXObject pdImage = JPEGFactory.createFromStream(document, in);
+                cs.drawImage(pdImage, imageX, imageY, imageWidth, imageHeight);
+                graphicsState.setNonStrokingAlphaConstant(0.1f); // 透明度
+                cs.setGraphicsStateParameters(graphicsState);
                 cs.close();
+
             }
 
             // 將最終的 pdf 文檔保存到文件中
