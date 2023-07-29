@@ -10,7 +10,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://maven.ghostscript.com' }
     }
 }
 rootProject.name = "testWatermark"
 include ':app'
+include ':lib'

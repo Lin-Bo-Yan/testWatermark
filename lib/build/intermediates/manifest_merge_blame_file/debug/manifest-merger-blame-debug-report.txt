@@ -1,0 +1,77 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.artifex.mupdf.viewer" >
+4
+5    <uses-sdk
+6        android:minSdkVersion="21"
+6-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml
+7        android:targetSdkVersion="31" />
+7-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml
+8
+9    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+9-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:5:2-77
+9-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:5:19-74
+10
+11    <application>
+11-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:6:2-34:16
+12        <activity
+12-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:7:3-28:14
+13            android:name="com.artifex.mupdf.viewer.DocumentActivity"
+13-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:8:4-36
+14            android:configChanges="orientation|screenSize|keyboardHidden"
+14-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:9:4-65
+15            android:exported="true" >
+15-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:10:4-27
+16            <intent-filter>
+16-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:12:4-27:20
+17                <action android:name="android.intent.action.VIEW" />
+17-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:13:5-57
+17-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:13:13-54
+18
+19                <category android:name="android.intent.category.BROWSABLE" />
+19-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:14:5-66
+19-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:14:15-63
+20                <category android:name="android.intent.category.DEFAULT" />
+20-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:15:5-64
+20-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:15:15-61
+21                <!-- list the mime-types we know about -->
+22                <data android:mimeType="application/pdf" />
+22-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:5-48
+22-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:11-45
+23                <data android:mimeType="application/vnd.ms-xpsdocument" />
+23-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:5-48
+23-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:11-45
+24                <data android:mimeType="application/oxps" />
+24-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:5-48
+24-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:11-45
+25                <data android:mimeType="application/vnd.comicbook+zip" />
+25-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:5-48
+25-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:11-45
+26                <data android:mimeType="application/x-cbz" />
+26-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:5-48
+26-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:11-45
+27                <data android:mimeType="application/epub+zip" />
+27-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:5-48
+27-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:11-45
+28                <data android:mimeType="application/x-fictionbook" />
+28-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:5-48
+28-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:11-45
+29                <data android:mimeType="application/x-mobipocket-ebook" />
+29-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:5-48
+29-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:11-45
+30                <!-- list application/octet-stream to catch the ones android doesn't recognize -->
+31                <data android:mimeType="application/octet-stream" />
+31-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:5-48
+31-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:17:11-45
+32            </intent-filter>
+33        </activity>
+34        <activity
+34-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:29:3-33:14
+35            android:name="com.artifex.mupdf.viewer.OutlineActivity"
+35-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:30:4-35
+36            android:configChanges="orientation|screenSize|keyboardHidden" >
+36-->C:\Users\boyan.lin\Desktop\testWatermark\lib\src\main\AndroidManifest.xml:31:4-65
+37        </activity>
+38    </application>
+39
+40</manifest>

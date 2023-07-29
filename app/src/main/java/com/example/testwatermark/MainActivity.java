@@ -1,14 +1,21 @@
 package com.example.testwatermark;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.artifex.mupdf.viewer.DocumentActivity;
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 import com.tom_roush.pdfbox.pdmodel.PDPage;
@@ -95,12 +102,28 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // 將最終的 pdf 文檔保存到文件中
-            String path = root.getAbsolutePath() + "/robert.pdf";
+            String path = root.getAbsolutePath() + "/example-pdf.pdf";
             document.save(path);
             document.close();
             tv.setText("已成功將 PDF 寫入" + path);
+            muPdfView(path);
         } catch (IOException e) {
             StringUtils.HaoLog("PdfBox-Android"+" Error loading or editing pdf" + e);
         }
+    }
+
+    private void muPdfView(String path){
+        String fileType = null;
+        int index = path.lastIndexOf(".");
+        if (index > 0) {
+            fileType = path.substring(index);
+        }
+        Intent intent = new Intent(this, DocumentActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.parse(path), fileType);
+        intent.putExtra(getComponentName().getPackageName() + ".ReturnToLibraryActivity", 1);
+        startActivity(intent);
     }
 }
