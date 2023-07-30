@@ -61,14 +61,15 @@ public class MainActivity extends AppCompatActivity {
         try {
             PDDocument document = PDDocument.load(assetManager.open("example-pdf.pdf"));
             PDPageTree pages = document.getPages();
-            PDExtendedGraphicsState graphicsState = new PDExtendedGraphicsState();
+            PDExtendedGraphicsState textGraphicsState = new PDExtendedGraphicsState();
+            PDExtendedGraphicsState imageGraphicsState = new PDExtendedGraphicsState();
             // 修改此處，加載自訂字體
             // 注意將 "path/to/NotoSansSC-Regular.otf" 換為你的字體文件路徑
             PDFont font = PDType0Font.load(document, assetManager.open("SentyDew.ttf"));
             float fontSize = 36.0f;
             for (PDPage page : pages) {
                 PDRectangle mediaBox = page.getMediaBox();
-                PDPageContentStream cs = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true);
+                PDPageContentStream pageContentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true);
 
 
 
@@ -78,27 +79,33 @@ public class MainActivity extends AppCompatActivity {
                 float startY = (mediaBox.getHeight() - fontSize) / 2;
 
                 // 添加浮水印文字
-                cs.beginText();
-                cs.setTextMatrix(Matrix.getRotateInstance(Math.PI / 4, startX, startY));
-                graphicsState.setNonStrokingAlphaConstant(0.5f); // 透明度
-                cs.setGraphicsStateParameters(graphicsState);
-                cs.setNonStrokingColor(15, 38, 192);
-                cs.setFont(font, 12);
-                cs.setTextTranslation(startX, startY);
-                cs.showText("這是浮水印");
-                cs.endText();
+                double percent = 0.3;
+                double radians = Math.PI / 2 * percent;
+                pageContentStream.beginText();
+                pageContentStream.setTextMatrix(Matrix.getRotateInstance(radians , startX, startY));
+                textGraphicsState.setNonStrokingAlphaConstant(0.7f); // 透明度
+                pageContentStream.setGraphicsStateParameters(textGraphicsState);
+                pageContentStream.setNonStrokingColor(15, 38, 192);
+                pageContentStream.setFont(font, 12);
+                pageContentStream.setTextTranslation(startX, startY);
+                pageContentStream.showText("這是浮水印");
+                pageContentStream.endText();
 
                 // 計算圖像的位置
                 float imageWidth = 100.0f;
                 float imageHeight = 100.0f;
                 float imageX = (mediaBox.getWidth() - imageWidth) / 2; // 居中顯示
-                float imageY = mediaBox.getLowerLeftY() + 10; // 距離底部 10 個單位
+                //float imageY = mediaBox.getLowerLeftY() + 10; // 距離底部 10 個單位
+                // 從頁面的上邊緣開始，並向下移動一半的頁面高度，然後再減去圖片高度的一半。這將圖片放在頁面的正中央。
+                // 先獲取頁面的上邊緣位置（mediaBox.getUpperRightY()），然後除以2來獲取頁面的垂直中心。然後它減去圖片高度的一半（imageHeight / 2），這樣將圖片的中心對齊到頁面的中心。
+                float imageY = mediaBox.getUpperRightY() / 2 - imageHeight / 2;
+
                 InputStream in = assetManager.open("falcon.jpg");
+                imageGraphicsState.setNonStrokingAlphaConstant(0.5f); // 透明度
+                pageContentStream.setGraphicsStateParameters(imageGraphicsState);
                 PDImageXObject pdImage = JPEGFactory.createFromStream(document, in);
-                cs.drawImage(pdImage, imageX, imageY, imageWidth, imageHeight);
-                //graphicsState.setNonStrokingAlphaConstant(0.5f); // 透明度
-                //cs.setGraphicsStateParameters(graphicsState);
-                cs.close();
+                pageContentStream.drawImage(pdImage, imageX, imageY, imageWidth, imageHeight);
+                pageContentStream.close();
             }
 
             // 將最終的 pdf 文檔保存到文件中
