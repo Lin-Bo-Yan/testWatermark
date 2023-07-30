@@ -74,37 +74,42 @@ public class MainActivity extends AppCompatActivity {
 
 
                 // 計算水印文字的位置
-                float stringWidth = font.getStringWidth("這是浮水印") * fontSize / 1000f;  // 注意，字體大小需與浮水印的字體大小一致
-                float startX = (mediaBox.getWidth() - stringWidth) / 2;
-                float startY = (mediaBox.getHeight() - fontSize) / 2;
-
-                // 添加浮水印文字
-                double percent = 0.3;
-                double radians = Math.PI / 2 * percent;
+                float imageWidth = 100.0f;
+                float imageHeight = 100.0f;
+                //float stringWidth = font.getStringWidth("這是浮水印") * fontSize / 1000f;  // 注意，字體大小需與浮水印的字體大小一致
+                float startX = mediaBox.getUpperRightX() / 2 - imageWidth / 2;
+                float startY = mediaBox.getUpperRightY() / 2 - imageHeight / 2;
+                //float centerX = (mediaBox.getWidth() - stringWidth) / 2;
+                //float centerY = (mediaBox.getHeight() - fontSize) / 2;
+                
+                // 控制文字和圖片的旋轉角度
+                double percent = 0.6;
+                double radians = -Math.PI / 2 * percent;
+                // 添加浮水印文字，beginText() 開始，endText()結束，改動條件須在這兩者之間
                 pageContentStream.beginText();
                 pageContentStream.setTextMatrix(Matrix.getRotateInstance(radians , startX, startY));
                 textGraphicsState.setNonStrokingAlphaConstant(0.7f); // 透明度
                 pageContentStream.setGraphicsStateParameters(textGraphicsState);
                 pageContentStream.setNonStrokingColor(15, 38, 192);
                 pageContentStream.setFont(font, 12);
-                pageContentStream.setTextTranslation(startX, startY);
                 pageContentStream.showText("這是浮水印");
                 pageContentStream.endText();
 
                 // 計算圖像的位置
-                float imageWidth = 100.0f;
-                float imageHeight = 100.0f;
-                float imageX = (mediaBox.getWidth() - imageWidth) / 2; // 居中顯示
                 //float imageY = mediaBox.getLowerLeftY() + 10; // 距離底部 10 個單位
                 // 從頁面的上邊緣開始，並向下移動一半的頁面高度，然後再減去圖片高度的一半。這將圖片放在頁面的正中央。
                 // 先獲取頁面的上邊緣位置（mediaBox.getUpperRightY()），然後除以2來獲取頁面的垂直中心。然後它減去圖片高度的一半（imageHeight / 2），這樣將圖片的中心對齊到頁面的中心。
-                float imageY = mediaBox.getUpperRightY() / 2 - imageHeight / 2;
+                //float imageX = (mediaBox.getWidth() - imageWidth) / 2; // 居中顯示
+                //float imageY = mediaBox.getUpperRightY() / 2 - imageHeight / 2;
 
                 InputStream in = assetManager.open("falcon.jpg");
                 imageGraphicsState.setNonStrokingAlphaConstant(0.5f); // 透明度
                 pageContentStream.setGraphicsStateParameters(imageGraphicsState);
+
+                pageContentStream.transform(Matrix.getRotateInstance(radians, startX, startY));
                 PDImageXObject pdImage = JPEGFactory.createFromStream(document, in);
-                pageContentStream.drawImage(pdImage, imageX, imageY, imageWidth, imageHeight);
+                pageContentStream.drawImage(pdImage, 0, 0, imageWidth, imageHeight);
+                pageContentStream.saveGraphicsState(); // 儲存當前的繪圖狀態
                 pageContentStream.close();
             }
 
